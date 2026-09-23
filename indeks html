@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditya — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Instrument+Serif:ital@1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#111111;--line:#1E1E1E;--red:#FF2B2B;--white:#F2F2F2;--muted:#8A8A8A}
+*{margin:0;padding:0;box-sizing:border-box} html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;cursor:none;overflow-x:hidden}
+h1,h2{font-family:'Syne',sans-serif} 
+a,button{cursor:none}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:grid;place-items:center;transition:1s cubic-bezier(.8,0,.2,1)}
+#loader h1{font-size:24px;letter-spacing:10px} #loader h1 span{color:var(--red)}
+#loader.hide{transform:translateY(-100%)}
+
+/* CURSOR */
+.cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:99999;mix-blend-mode:normal;transition:transform .15s ease}
+.cursor2{position:fixed;top:0;left:0;width:40px;height:40px;border:1px solid rgba(255,43,43,.4);border-radius:50%;pointer-events:none;z-index:99998;transition:all .25s ease}
+
+/* NAV */
+nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);width:90%;max-width:1100px;display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:rgba(17,17,17,.8);backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:100px;z-index:100;transition:.4s}
+nav.hide{transform:translateX(-50%) translateY(-150%)}
+.nav-links a{margin-left:24px;text-decoration:none;color:var(--muted);font-size:12px;letter-spacing:1.5px;transition:.3s} .nav-links a:hover{color:var(--white)} .nav-links a.active{color:var(--red)}
+
+/* HERO */
+.hero{padding:160px 6% 100px;display:grid;grid-template-columns:1.15fr .85fr;gap:60px;max-width:1400px;margin:0 auto}
+.eyebrow{font-size:11px;letter-spacing:4px;color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:30px;height:1px;background:var(--red)}
+.hero h1{font-size:clamp(44px,6.5vw,86px);line-height:.88;letter-spacing:-3px;font-weight:800}
+.hero h1 em{font-family:'Instrument Serif';font-weight:400;text-transform:lowercase;letter-spacing:0;color:var(--red)}
+.hero p{color:var(--muted);line-height:1.7;margin:28px 0 36px;max-width:440px}
+.cta{display:flex;gap:14px;align-items:center}
+.btn-primary{background:var(--red);color:white;padding:16px 30px;border-radius:100px;text-decoration:none;font-family:'Syne';font-size:13px;font-weight:700;letter-spacing:1px;display:inline-flex;align-items:center;gap:8px;transition:.3s}
+.btn-primary:hover{background:white;color:black;transform:translateY(-2px)}
+.btn-ghost{padding:16px 30px;border-radius:100px;border:1px solid var(--line);text-decoration:none;color:var(--white);font-size:13px;letter-spacing:1px;transition:.3s} .btn-ghost:hover{border-color:var(--white)}
+
+/* ID CARD UX */
+.id-wrap{position:relative}
+.id-card{background:radial-gradient(600px at 0% 0%, rgba(255,43,43,.15), transparent 70%), var(--card);border:1px solid var(--line);border-radius:24px;padding:28px;overflow:hidden}
+.id-tabs{display:flex;gap:8px;margin-bottom:24px;background:#0E0E0E;padding:6px;border-radius:100px;width:fit-content}
+.id-tabs button{background:transparent;border:0;color:var(--muted);padding:8px 18px;border-radius:100px;font-size:11px;letter-spacing:1px;transition:.3s} .id-tabs button.active{background:var(--white);color:black}
+.tab-content{display:none} .tab-content.active{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)}}
+.avatar-row{display:flex;gap:18px;align-items:center;margin-bottom:20px}
+.avatar{width:64px;height:64px;border-radius:50%;background:url('https://i.pravatar.cc/200') center/cover;border:1px solid var(--line)}
+.badge{font-size:10px;background:var(--red);padding:4px 10px;border-radius:100px;letter-spacing:1px}
+.data{display:grid;gap:14px} .data div{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px dashed #222;padding-bottom:14px} .data b{color:var(--muted);font-weight:400}
+
+/* SECTIONS */
+section{padding:110px 6%;max-width:1400px;margin:0 auto}
+.title{font-size:clamp(32px,5vw,64px);letter-spacing:-2px;margin-bottom:50px;display:flex;gap:20px;align-items:baseline}
+.title span{font-family:'Instrument Serif';color:var(--red);text-transform:lowercase;font-size:1.2em}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.project-card{border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden;transition:.5s cubic-bezier(.2,.8,.2,1)} .project-card:hover{transform:translateY(-8px);border-color:var(--red)}
+.project-card .thumb{height:280px;background:#151515;position:relative;overflow:hidden}
+.project-card .thumb::after{content:'VIEW →';position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.6);opacity:0;transition:.4s;font-family:'Syne';letter-spacing:3px} .project-card:hover .thumb::after{opacity:1}
+.project-card .meta{padding:22px} .project-card h3{font-size:18px;margin-bottom:6px} .project-card p{color:var(--muted);font-size:13px}
+
+.reveal{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.16,1,.3,1)} .reveal.in{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:120px} body{cursor:auto} .cursor,.cursor2{display:none} a,button{cursor:pointer} .grid-2{grid-template-columns:1fr} nav{top:10px;width:95%}}
+</style>
+</head>
+<body>
+
+<div id="loader"><h1>ADITYA<span>.</span></h1></div>
+<div class="cursor"></div><div class="cursor2"></div>
+
+<nav id="navbar">
+  <div style="font-family:'Syne';font-weight:800">A.P<span style="color:var(--red)">.</span></div>
+  <div class="nav-links"><a href="#about" class="active">ABOUT</a><a href="#work">WORK</a><a href="#contact">CONTACT</a></div>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="eyebrow reveal in">BASED IN BANDUNG — AVAILABLE FOR WORK</div>
+    <h1 class="reveal in">DESAIN YANG <em>berani,</em> TAPI TETAP <span style="color:var(--red)">ELEGAN.</span></h1>
+    <p class="reveal in">Saya <b style="color:white">[Nama Kamu]</b>, 19 tahun. Fokus bikin website & branding untuk brand lokal yang mau kelihatan mahal tanpa ribet.</p>
+    <div class="cta reveal in"><a href="#work" class="btn-primary">LIHAT KARYA</a><a href="#" class="btn-ghost">DOWNLOAD CV</a></div>
+  </div>
+
+  <div class="id-wrap reveal in">
+    <div class="id-card">
+      <div class="id-tabs"><button class="active" onclick="openTab(0)">BIODATA</button><button onclick="openTab(1)">SKILL</button><button onclick="openTab(2)">FUN FACT</button></div>
+      
+      <div class="tab-content active" id="tab0">
+        <div class="avatar-row"><div class="avatar"></div><div><div style="font-family:'Syne';font-weight:700">GANTI NAMA KAMU</div><div style="font-size:11px;color:var(--muted);letter-spacing:2px">CREATIVE DEV / 2026</div></div><div class="badge">● ONLINE</div></div>
+        <div class="data">
+          <div><b>UMUR</b><span>19 Tahun</span></div>
+          <div><b>TTL</b><span>Bandung, 12 Jan 2005</span></div>
+          <div><b>PENDIDIKAN</b><span>SMK Telkom BDG</span></div>
+          <div><b>DOMISILI</b><span>Bandung, ID</span></div>
+          <div><b>EMAIL</b><span>halo@aditya.com</span></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab1">
+        <div class="data">
+          <div><b>FIGMA</b><span>UI Design Expert</span></div>
+          <div><b>FRONTEND</b><span>HTML, Tailwind, JS</span></div>
+          <div><b>BRANDING</b><span>Logo & Identity</span></div>
+          <div><b>TOOLS</b><span>VS Code, Notion, PS</span></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab2">
+        <p style="color:var(--muted);font-size:14px;line-height:1.7">☕ Harus ngopi 2x sehari kalau mau ngoding.<br>🎧 Dengerin lo-fi sambil desain sampai jam 2 pagi.<br>⌨️ Bisa ngetik 80 WPM tanpa lihat keyboard.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="work">
+  <div class="title reveal">KARYA <span>terpilih</span></div>
+  <div class="grid-2">
+    <div class="project-card reveal"><div class="thumb" style="background:radial-gradient(at 30% 30%, #2a0a0a, #111)"></div><div class="meta"><h3>Website Kafe Senja</h3><p>Landing page yang naikin reservasi 40% dalam 2 minggu.</p></div></div>
+    <div class="project-card reveal"><div class="thumb" style="background:radial-gradient(at 70% 70%, #1a1a1a, #0a0a0a)"></div><div class="meta"><h3>Branding Seblak Premium</h3><p>Rebranding dari warung biasa jadi brand yang Instagram-able.</p></div></div>
+  </div>
+</section>
+
+<section id="contact" style="text-align:center;border-top:1px solid var(--line)">
+  <h2 class="reveal" style="font-size:clamp(48px,8vw,100px);line-height:.9">PUNYA IDE?<br><span style="color:var(--red);font-family:'Instrument Serif';text-transform:lowercase;font-style:italic">ayo wujudin.</span></h2>
+  <div class="reveal" style="margin-top:40px"><a href="https://wa.me/6281234567890" class="btn-primary" style="padding:20px 50px;font-size:16px">CHAT WHATSAPP →</a></div>
+</section>
+
+<script>
+// Loader
+setTimeout(()=>document.getElementById('loader').classList.add('hide'),1200);
+
+// Cursor
+const c=document.querySelector('.cursor'), c2=document.querySelector('.cursor2');
+document.addEventListener('mousemove', e=>{ c.style.left=e.clientX+'px'; c.style.top=e.clientY+'px'; c2.style.left=(e.clientX-20)+'px'; c2.style.top=(e.clientY-20)+'px'; });
+
+// Navbar hide on scroll
+let last=0; window.addEventListener('scroll',()=>{ const cur=scrollY; document.getElementById('navbar').classList.toggle('hide', cur>last && cur>200); last=cur; });
+
+// Reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.15}); document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Tabs Biodata
+function openTab(i){ document.querySelectorAll('.tab-content').forEach((t,idx)=>t.classList.toggle('active',idx===i)); document.querySelectorAll('.id-tabs button').forEach((b,idx)=>b.classList.toggle('active',idx===i)); }
+</script>
+</body>
+</html>
